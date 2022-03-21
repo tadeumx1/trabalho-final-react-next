@@ -55,6 +55,7 @@ export default function ProductDetail({ data }) {
 
   const [map, setMap] = useState(null);
   const [productButtonText, setProductButtonText] = useState('');
+  const [latitudeLongitude, setLatitudeLongitude] = useState(null);
 
   const [product, setProduct] = useState({});
 
@@ -126,6 +127,21 @@ export default function ProductDetail({ data }) {
       setProductButtonText('Remover Favorito');
     }
   }, [product]);
+
+  useEffect(() => {
+    if (latitudeLongitude) {
+      const { latitude, longitude } = latitudeLongitude;
+
+      const messageUser = new mapboxgl.Popup().setText(
+        'Localização do usuário'
+      );
+
+      new mapboxgl.Marker({ color: '#808080' })
+        .setLngLat([longitude, latitude])
+        .setPopup(messageUser)
+        .addTo(map);
+    }
+  }, [latitudeLongitude]);
 
   const handleGetUpdateProduct = async (productId) => {
     const apiClient = getAPIClient();
